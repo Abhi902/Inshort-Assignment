@@ -23,8 +23,9 @@ class MovieDetailsPage extends StatelessWidget {
     final apiKey = RepositoryProvider.of<String>(context);
 
     return BlocProvider(
-      create: (_) => MovieDetailsBloc(apiClient: apiClient, apiKey: apiKey)
-        ..add(FetchMovieDetails(movieId)),
+      create: (_) =>
+          MovieDetailsBloc(movieRepository: RepositoryProvider.of(context))
+            ..add(FetchMovieDetails(movieId)),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inshort_assignment/src/data/local/movie_detail_hive_adapter.dart';
 import 'src/presentation/home_bloc/home_event_bloc.dart';
 
 import 'src/presentation/pages/home_page.dart';
@@ -16,6 +17,8 @@ void main() async {
   // Initialize Hive and open box
   await Hive.initFlutter();
   Hive.registerAdapter(MovieHiveAdapter());
+  Hive.registerAdapter(MovieDetailsHiveAdapter());
+
   final movieBox = await Hive.openBox<MovieHive>('moviesBox');
 
   // Initialize Dio and Retrofit client
@@ -27,11 +30,14 @@ void main() async {
 
   // Provide your TMDB API key here
   const apiKey = '013ea9a262afac3c059176f1448cf617';
+  final movieDetailsBox =
+      await Hive.openBox<MovieDetailsHive>('movieDetailsBox');
 
   // Initialize repository
   final movieRepository = MovieRepository(
     apiClient: apiClient,
     movieBox: movieBox,
+    movieDetailsBox: movieDetailsBox, // Add details box here
     apiKey: apiKey,
   );
 
