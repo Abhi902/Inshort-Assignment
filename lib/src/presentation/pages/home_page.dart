@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inshort_assignment/src/presentation/bloc/home_event_bloc.dart';
-import 'package:inshort_assignment/src/presentation/bloc/home_event_event.dart';
-import 'package:inshort_assignment/src/presentation/bloc/home_event_state.dart';
+import 'package:inshort_assignment/src/presentation/home_bloc/home_event_bloc.dart';
+import 'package:inshort_assignment/src/presentation/home_bloc/home_event_event.dart';
+import 'package:inshort_assignment/src/presentation/home_bloc/home_event_state.dart';
 import 'package:inshort_assignment/src/presentation/pages/movie_details_page.dart';
 import '../../domain/models/movie.dart';
 
@@ -134,7 +134,7 @@ class _MovieCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => MovieDetailsPage(movie: movie),
+            builder: (_) => MovieDetailsPage(movieId: movie.id),
           ),
         );
       },

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:inshort_assignment/src/domain/models/movie_details.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../domain/models/movie.dart';
 
@@ -29,8 +30,8 @@ abstract class TmdbApiClient {
   );
 
   @GET("/movie/{movie_id}")
-  Future<Movie> getMovieDetails(
+  Future<MovieDetails> getMovieDetails(
     @Path("movie_id") int movieId,
-    @Query("api_key") String apiKey,
+    @Query("language") String language,
   );
 }

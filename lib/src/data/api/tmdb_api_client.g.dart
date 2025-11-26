@@ -145,15 +145,15 @@ class _TmdbApiClient implements TmdbApiClient {
   }
 
   @override
-  Future<Movie> getMovieDetails(
+  Future<MovieDetails> getMovieDetails(
     int movieId,
-    String apiKey,
+    String language,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'api_key': apiKey};
+    final queryParameters = <String, dynamic>{r'language': language};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Movie>(Options(
+    final _options = _setStreamType<MovieDetails>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -170,9 +170,9 @@ class _TmdbApiClient implements TmdbApiClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Movie _value;
+    late MovieDetails _value;
     try {
-      _value = Movie.fromJson(_result.data!);
+      _value = MovieDetails.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
