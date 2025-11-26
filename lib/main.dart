@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inshort_assignment/src/presentation/bloc/home_event_bloc.dart';
 
@@ -41,12 +42,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Movies Database',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: BlocProvider(
-        create: (context) => HomeBloc(movieRepository: movieRepository),
-        child: const HomePage(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (_, __) => MaterialApp(
+        title: 'Movies Database',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: BlocProvider(
+          create: (context) => HomeBloc(movieRepository: movieRepository),
+          child: const HomePage(),
+        ),
       ),
     );
   }
