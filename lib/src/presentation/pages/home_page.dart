@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
 import 'package:inshort_assignment/src/presentation/home_bloc/home_event_bloc.dart';
 import 'package:inshort_assignment/src/presentation/home_bloc/home_event_event.dart';
 import 'package:inshort_assignment/src/presentation/home_bloc/home_event_state.dart';
+import 'package:inshort_assignment/src/presentation/pages/bookmark_page.dart';
 import 'package:inshort_assignment/src/presentation/pages/movie_details_page.dart';
 import '../../domain/models/movie.dart';
 
@@ -28,6 +30,15 @@ class HomePage extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.bookmark),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SavedMoviesPage()),
+              ),
+            ),
+          ],
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           elevation: 0,
         ),
@@ -120,12 +131,39 @@ class SectionTitle extends StatelessWidget {
   }
 }
 
-class _MovieCard extends StatelessWidget {
+class _MovieCard extends StatefulWidget {
   final Movie movie;
 
   const _MovieCard({Key? key, required this.movie}) : super(key: key);
 
+  @override
+  State<_MovieCard> createState() => _MovieCardState();
+}
+
+class _MovieCardState extends State<_MovieCard> {
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+
+  late bool isBookmarked;
+
+  @override
+  void initState() {
+    super.initState();
+    final repo = context.read<MovieRepository>();
+    isBookmarked = repo.isBookmarked(widget.movie.id);
+  }
+
+  void toggleBookmark() async {
+    final repo = context.read<MovieRepository>();
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    if (isBookmarked) {
+      await repo.addBookmark(widget.movie);
+    } else {
+      await repo.removeBookmark(widget.movie.id);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +172,7 @@ class _MovieCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => MovieDetailsPage(movieId: movie.id),
+            builder: (_) => MovieDetailsPage(movieId: widget.movie.id),
           ),
         );
       },
@@ -158,7 +196,7 @@ class _MovieCard extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: CachedNetworkImage(
-                  imageUrl: imageBaseUrl + movie.posterPath,
+                  imageUrl: imageBaseUrl + widget.movie.posterPath,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),
@@ -168,6 +206,17 @@ class _MovieCard extends StatelessWidget {
                     child: const Icon(Icons.broken_image,
                         color: Colors.white30, size: 64),
                   ),
+                ),
+              ),
+              Positioned(
+                top: 8.h,
+                right: 8.w,
+                child: IconButton(
+                  icon: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: Colors.amber,
+                  ),
+                  onPressed: toggleBookmark,
                 ),
               ),
               Positioned(
@@ -193,7 +242,7 @@ class _MovieCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.title,
+                      widget.movie.title,
                       style: (Theme.of(context).textTheme.bodyMedium ??
                               const TextStyle())
                           .copyWith(
@@ -214,7 +263,7 @@ class _MovieCard extends StatelessWidget {
                         const Icon(Icons.star, color: Colors.amber, size: 16),
                         SizedBox(width: 4.w),
                         Text(
-                          4.0.toStringAsFixed(1),
+                          4.5.toString(), // Placeholder for rating
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],

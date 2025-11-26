@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
+import 'package:inshort_assignment/src/data/local/bookmarked_movie_hive_adapter.dart';
 import 'package:inshort_assignment/src/data/local/movie_detail_hive_adapter.dart';
 import '../api/tmdb_api_client.dart';
 import '../../domain/models/movie.dart';
@@ -15,6 +16,8 @@ class MovieRepository {
   final TmdbApiClient apiClient;
   final Box<MovieHive> movieBox;
   final Box<MovieDetailsHive> movieDetailsBox; // Add details box
+  final Box<BookmarkedMovieHive> bookmarkedBox; // Add bookmarked movies box
+
   final String apiKey;
   final String language;
 
@@ -22,6 +25,7 @@ class MovieRepository {
     required this.apiClient,
     required this.movieBox,
     required this.movieDetailsBox,
+    required this.bookmarkedBox, // pass in bookmarked box
     required this.apiKey,
     this.language = 'en-US',
   });
@@ -74,5 +78,23 @@ class MovieRepository {
 
   List<Movie> _getCachedMovies() {
     return movieBox.values.map((m) => m.toDomain()).toList();
+  }
+
+  //Bookmarking functions
+  Future<void> addBookmark(Movie movie) async {
+    final bookmarkHive = BookmarkedMovieHive.fromDomain(movie);
+    await bookmarkedBox.put(bookmarkHive.id, bookmarkHive);
+  }
+
+  Future<void> removeBookmark(int movieId) async {
+    await bookmarkedBox.delete(movieId);
+  }
+
+  List<Movie> getBookmarkedMovies() {
+    return bookmarkedBox.values.map((b) => b.toDomain()).toList();
+  }
+
+  bool isBookmarked(int movieId) {
+    return bookmarkedBox.containsKey(movieId);
   }
 }

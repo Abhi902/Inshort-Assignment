@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inshort_assignment/src/data/local/bookmarked_movie_hive_adapter.dart';
 import 'package:inshort_assignment/src/data/local/movie_detail_hive_adapter.dart';
 import 'src/presentation/home_bloc/home_event_bloc.dart';
 
@@ -18,9 +19,11 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(MovieHiveAdapter());
   Hive.registerAdapter(MovieDetailsHiveAdapter());
+  Hive.registerAdapter(BookmarkedMovieHiveAdapter());
 
   final movieBox = await Hive.openBox<MovieHive>('moviesBox');
-
+  final bookmarkedBox =
+      await Hive.openBox<BookmarkedMovieHive>('bookmarkedMoviesBox');
   // Initialize Dio and Retrofit client
   final dio = Dio();
   dio.options.headers['Authorization'] =
@@ -37,10 +40,10 @@ void main() async {
   final movieRepository = MovieRepository(
     apiClient: apiClient,
     movieBox: movieBox,
-    movieDetailsBox: movieDetailsBox, // Add details box here
+    movieDetailsBox: movieDetailsBox,
+    bookmarkedBox: bookmarkedBox, // Add bookmark box here
     apiKey: apiKey,
   );
-
   runApp(
     MultiRepositoryProvider(
       providers: [
