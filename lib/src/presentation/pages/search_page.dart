@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,87 +20,95 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SearchBloc(
+        // ✅ NO initial event
         movieRepository: context.read<MovieRepository>(),
-      )..add(const TextChanged('')),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: Text(
-            'Search Movies',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          elevation: 0,
-        ),
-        body: Column(
-          children: [
-            // Search Input Field
-            Padding(
-              padding: EdgeInsets.all(16.w),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search for movies...',
-                  prefixIcon:
-                      Icon(Icons.search, color: Theme.of(context).hintColor),
-                  suffixIcon: BlocBuilder<SearchBloc, SearchState>(
-                    builder: (context, state) {
-                      if (state is SearchLoading) {
-                        return SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: CircularProgressIndicator(strokeWidth: 2.w),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey.shade900.withOpacity(0.1),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 16.h,
-                  ),
-                ),
-                onChanged: (query) {
-                  context.read<SearchBloc>().add(TextChanged(query));
-                },
-              ),
-            ),
-            // Results List
-            Expanded(
-              child: BlocBuilder<SearchBloc, SearchState>(
-                builder: (context, state) {
-                  if (state is SearchInitial) {
-                    return _buildEmptyState(
-                        context, 'Start typing to search movies');
-                  } else if (state is SearchLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is SearchEmpty) {
-                    return _buildEmptyState(context, 'No movies found');
-                  } else if (state is SearchError) {
-                    return Center(
-                      child: Text(
-                        'Error: ${state.message}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  } else if (state is SearchSuccess) {
-                    return _buildMoviesList(state.results, context);
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
-          ],
-        ),
       ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Text(
+              'Search Movies',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            elevation: 0,
+          ),
+          body: Column(
+            children: [
+              // Search Input Field
+              Padding(
+                padding: EdgeInsets.all(16.w),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search for movies...',
+                    prefixIcon:
+                        Icon(Icons.search, color: Theme.of(context).hintColor),
+                    suffixIcon: BlocBuilder<SearchBloc, SearchState>(
+                      builder: (context, state) {
+                        if (state is SearchLoading) {
+                          return SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(strokeWidth: 2.w),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade900.withOpacity(0.1),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 16.h,
+                    ),
+                  ),
+                  onChanged: (query) {
+                    context
+                        .read<SearchBloc>()
+                        .add(TextChanged(query)); // ✅ FIXED
+                  },
+                ),
+              ),
+              // Results List
+              Expanded(
+                child: BlocBuilder<SearchBloc, SearchState>(
+                  builder: (context, state) {
+                    log('🔄 Search State: $state');
+                    if (state is SearchInitial) {
+                      return _buildEmptyState(
+                          context, 'Start typing to search movies');
+                    } else if (state is SearchLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is SearchEmpty) {
+                      return _buildEmptyState(context, 'No movies found');
+                    } else if (state is SearchError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${state.message}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else if (state is SearchSuccess) {
+                      log('🎬 Displaying ${state.results.length} movies');
+                      log(state.results[0].toString());
+                      return _buildMoviesList(state.results, context);
+                    }
+                    return Center(child: Text('Unknown state: $state'));
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -180,14 +190,14 @@ class _SearchMovieTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            movie.overview,
+            movie.overview ?? "No description available.",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           SizedBox(height: 4.h),
           Text(
-            movie.releaseDate,
+            movie.releaseDate ?? 'Unknown Release Date',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.grey.shade500,
                 ),

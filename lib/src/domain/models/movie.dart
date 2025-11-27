@@ -1,4 +1,3 @@
-// movie.dart
 import 'package:json_annotation/json_annotation.dart';
 
 part 'movie.g.dart';
@@ -7,18 +6,19 @@ part 'movie.g.dart';
 class Movie {
   final int id;
   final String title;
-  final String overview;
+
+  final String? overview; // Make nullable if sometimes missing/null
   @JsonKey(name: 'poster_path')
-  final String posterPath;
+  final String? posterPath; // Make nullable
   @JsonKey(name: 'release_date')
-  final String releaseDate;
+  final String? releaseDate; // Make nullable
 
   Movie({
     required this.id,
     required this.title,
-    required this.overview,
-    required this.posterPath,
-    required this.releaseDate,
+    this.overview,
+    this.posterPath,
+    this.releaseDate,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);

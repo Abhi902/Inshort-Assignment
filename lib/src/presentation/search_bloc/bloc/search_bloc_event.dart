@@ -15,3 +15,19 @@ class TextChanged extends SearchBlocEvent {
   @override
   List<Object> get props => [text];
 }
+
+class SearchQuery extends SearchBlocEvent {
+  final String query;
+
+  const SearchQuery(this.query);
+
+  @override
+  List<Object> get props => [query];
+}
+
+class ClearSearch extends SearchBlocEvent {
+  const ClearSearch();
+
+  @override
+  List<Object> get props => [];
+}

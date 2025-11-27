@@ -9,6 +9,7 @@ import 'package:inshort_assignment/src/presentation/home_bloc/home_event_state.d
 import 'package:inshort_assignment/src/presentation/pages/bookmark_page.dart';
 import 'package:inshort_assignment/src/presentation/pages/movie_details_page.dart';
 import 'package:inshort_assignment/src/presentation/pages/search_page.dart';
+import 'package:inshort_assignment/src/presentation/search_bloc/bloc/search_bloc_bloc.dart';
 import '../../domain/models/movie.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,7 +33,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
           actions: [
-            // Bookmark Button (existing)
             IconButton(
               icon: const Icon(Icons.bookmark),
               onPressed: () => Navigator.push(
@@ -40,12 +40,13 @@ class HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const SavedMoviesPage()),
               ),
             ),
-            // Search Button (NEW)
             IconButton(
               icon: const Icon(Icons.search),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const SearchPage()),
+                MaterialPageRoute(
+                  builder: (_) => const SearchPage(),
+                ),
               ),
             ),
           ],
@@ -206,7 +207,7 @@ class _MovieCardState extends State<_MovieCard> {
             children: [
               Positioned.fill(
                 child: CachedNetworkImage(
-                  imageUrl: imageBaseUrl + widget.movie.posterPath,
+                  imageUrl: imageBaseUrl + (widget.movie.posterPath ?? ''),
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),

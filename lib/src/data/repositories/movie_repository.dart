@@ -72,15 +72,22 @@ class MovieRepository {
 
   Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     try {
+      log('Searching movies with query: $query');
+      log('API Key: $apiKey, Language: $language, Page: $page');
       final response = await apiClient.searchMovies(
         apiKey, // api_key
         language, // language
         query, // query
         page, // page
-        false, // include_adult ← Now this will work
+        true, // include_adult ← Now this will work
       );
+
+      log('Search API response received with ${response.results.length} results');
+
       return response.results;
-    } catch (_) {
+    } catch (e, stackTrace) {
+      log('Search API error: $e');
+      log(stackTrace.toString());
       return [];
     }
   }

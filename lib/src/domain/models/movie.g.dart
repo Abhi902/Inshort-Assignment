@@ -9,9 +9,9 @@ part of 'movie.dart';
 Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
-      overview: json['overview'] as String,
-      posterPath: json['poster_path'] as String,
-      releaseDate: json['release_date'] as String,
+      overview: json['overview'] as String?,
+      posterPath: json['poster_path'] as String?,
+      releaseDate: json['release_date'] as String?,
     );
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{

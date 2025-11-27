@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inshort_assignment/src/data/interceptors/logging_interceptor.dart';
+import 'package:inshort_assignment/src/data/interceptors/retry_interceptor.dart';
 import 'package:inshort_assignment/src/data/local/bookmarked_movie_hive_adapter.dart';
 import 'package:inshort_assignment/src/data/local/movie_detail_hive_adapter.dart';
 import 'src/presentation/home_bloc/home_event_bloc.dart';
@@ -25,7 +27,18 @@ void main() async {
   final bookmarkedBox =
       await Hive.openBox<BookmarkedMovieHive>('bookmarkedMoviesBox');
   // Initialize Dio and Retrofit client
-  final dio = Dio();
+  final dio = Dio(BaseOptions(
+    baseUrl: 'https://api.themoviedb.org/3/',
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
+    headers: {
+      'accept': 'application/json',
+    },
+  ));
+
+// Add interceptors
+  dio.interceptors.add(LoggingInterceptor());
+  dio.interceptors.add(RetryInterceptor(dio: dio));
   dio.options.headers['Authorization'] =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMTNlYTlhMjYyYWZhYzNjMDU5MTc2ZjE0NDhjZjYxNyIsIm5iZiI6MTc2NDE3NDI2Ny41MzMsInN1YiI6IjY5MjcyOWJiZTBjNGNhZmY5MWE3NTgwZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sIZUabYkN-7dSpse1Pf6pl1TzHOMBnxS-f729aYIYWQ';
   dio.options.headers['accept'] = 'application/json';

@@ -32,9 +32,9 @@ class MovieHive extends HiveObject {
     return MovieHive(
       id: movie.id,
       title: movie.title,
-      overview: movie.overview,
-      posterPath: movie.posterPath,
-      releaseDate: movie.releaseDate,
+      overview: movie.overview ?? "",
+      posterPath: movie.posterPath ?? "",
+      releaseDate: movie.releaseDate ?? "",
     );
   }
 
