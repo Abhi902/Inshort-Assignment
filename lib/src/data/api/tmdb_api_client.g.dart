@@ -108,12 +108,18 @@ class _TmdbApiClient implements TmdbApiClient {
   @override
   Future<MovieResponse> searchMovies(
     String apiKey,
+    String language,
     String query,
+    int page,
+    bool includeAdult,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'api_key': apiKey,
+      r'language': language,
       r'query': query,
+      r'page': page,
+      r'include_adult': includeAdult,
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

@@ -70,6 +70,21 @@ class MovieRepository {
     }
   }
 
+  Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
+    try {
+      // final response = await apiClient.searchMovies(
+      //   apiKey,
+      //   language,
+      //   query,
+      //   page,
+      //   includeAdult: false,
+      // );
+      return [];
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<void> _cacheMovies(List<Movie> movies) async {
     final moviesHive = movies.map((m) => MovieHive.fromDomain(m)).toList();
     await movieBox.clear();

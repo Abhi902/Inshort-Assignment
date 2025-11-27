@@ -23,10 +23,13 @@ abstract class TmdbApiClient {
     @Query("page") int page,
   );
 
-  @GET("/search/movie")
+  @GET('/search/movie')
   Future<MovieResponse> searchMovies(
-    @Query("api_key") String apiKey,
-    @Query("query") String query,
+    @Query('api_key') String apiKey,
+    @Query('language') String language,
+    @Query('query') String query,
+    @Query('page') int page,
+    @Query('include_adult') bool includeAdult,
   );
 
   @GET("/movie/{movie_id}")
