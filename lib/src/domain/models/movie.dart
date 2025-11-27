@@ -28,13 +28,24 @@ class Movie {
 
 @JsonSerializable()
 class MovieResponse {
-  final int page;
   final List<Movie> results;
+  final int page;
+  final int total_pages;
+  final int total_results;
 
-  MovieResponse({required this.page, required this.results});
+  MovieResponse({
+    required this.results,
+    required this.page,
+    required this.total_pages,
+    required this.total_results,
+  });
 
-  factory MovieResponse.fromJson(Map<String, dynamic> json) =>
-      _$MovieResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MovieResponseToJson(this);
+  factory MovieResponse.fromJson(Map<String, dynamic> json) {
+    return MovieResponse(
+      results: (json['results'] as List).map((e) => Movie.fromJson(e)).toList(),
+      page: json['page'] ?? 1,
+      total_pages: json['total_pages'] ?? 1,
+      total_results: json['total_results'] ?? 0,
+    );
+  }
 }

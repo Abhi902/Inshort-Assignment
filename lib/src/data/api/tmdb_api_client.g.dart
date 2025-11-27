@@ -111,7 +111,7 @@ class _TmdbApiClient implements TmdbApiClient {
     String language,
     String query,
     int page,
-    bool includeAdult,
+    bool? includeAdult,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -121,6 +121,7 @@ class _TmdbApiClient implements TmdbApiClient {
       r'page': page,
       r'include_adult': includeAdult,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<MovieResponse>(Options(

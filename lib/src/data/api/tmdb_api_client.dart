@@ -23,13 +23,14 @@ abstract class TmdbApiClient {
     @Query("page") int page,
   );
 
+// In your TmdbApiClient interface
   @GET('/search/movie')
   Future<MovieResponse> searchMovies(
     @Query('api_key') String apiKey,
     @Query('language') String language,
     @Query('query') String query,
     @Query('page') int page,
-    @Query('include_adult') bool includeAdult,
+    @Query('include_adult') bool? includeAdult, // Make nullable/optional
   );
 
   @GET("/movie/{movie_id}")

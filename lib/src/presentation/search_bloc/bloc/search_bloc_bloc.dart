@@ -1,40 +1,45 @@
-// import 'dart:async';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
-// import 'package:inshort_assignment/src/presentation/search_bloc/bloc/search_bloc_event.dart';
-  
-// class SearchBloc extends Bloc<SearchBlocEvent, SearchState> {
-//   final MovieRepository movieRepository;
-//   Timer? _debounce;
+import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
+import 'search_bloc_event.dart';
+import 'search_bloc_state.dart';
 
-//   SearchBloc({required this.movieRepository}) : super(SearchInitial()) {
-//     on<TextChanged>((event, emit) {
-//       final query = event.text.trim();
+class SearchBloc extends Bloc<SearchBlocEvent, SearchState> {
+  final MovieRepository movieRepository;
+  Timer? _debounce;
 
-//       if (_debounce?.isActive ?? false) _debounce!.cancel();
+  SearchBloc({required this.movieRepository}) : super(SearchInitial()) {
+    on<TextChanged>(_onTextChanged);
+  }
 
-//       _debounce = Timer(const Duration(milliseconds: 500), () async {
-//         if (query.isEmpty) {
-//           emit(SearchInitial());
-//           return;
-//         }
+  void _onTextChanged(TextChanged event, Emitter<SearchState> emit) {
+    final query = event.text.trim();
 
-//         emit(SearchLoading());
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-//         final results = await movieRepository.searchMovies(query);
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (query.isEmpty) {
+        emit(SearchInitial());
+        return;
+      }
 
-//         if (results.isEmpty) {
-//           emit(SearchEmpty());
-//         } else {
-//           emit(SearchSuccess(results: results));
-//         }
-//       });
-//     });
-//   }
+      emit(SearchLoading());
+      try {
+        final results = await movieRepository.searchMovies(query);
+        if (results.isEmpty) {
+          emit(SearchEmpty());
+        } else {
+          emit(SearchSuccess(results: results));
+        }
+      } catch (e) {
+        emit(SearchError(message: e.toString()));
+      }
+    });
+  }
 
-//   @override
-//   Future<void> close() {
-//     _debounce?.cancel();
-//     return super.close();
-//   }
-// }
+  @override
+  Future<void> close() {
+    _debounce?.cancel();
+    return super.close();
+  }
+}

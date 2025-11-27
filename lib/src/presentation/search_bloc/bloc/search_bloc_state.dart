@@ -1,12 +1,33 @@
-// part of 'search_bloc_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:inshort_assignment/src/domain/models/movie.dart';
 
-// import 'package:equatable/equatable.dart';
+abstract class SearchState extends Equatable {
+  const SearchState();
 
-// sealed class SearchBlocState extends Equatable {
-//   const SearchBlocState();
-  
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// final class SearchBlocInitial extends SearchBlocState {}
+class SearchInitial extends SearchState {}
+
+class SearchLoading extends SearchState {}
+
+class SearchSuccess extends SearchState {
+  final List<Movie> results;
+
+  const SearchSuccess({required this.results});
+
+  @override
+  List<Object> get props => [results];
+}
+
+class SearchEmpty extends SearchState {}
+
+class SearchError extends SearchState {
+  final String message;
+
+  const SearchError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

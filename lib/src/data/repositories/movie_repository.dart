@@ -72,14 +72,14 @@ class MovieRepository {
 
   Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     try {
-      // final response = await apiClient.searchMovies(
-      //   apiKey,
-      //   language,
-      //   query,
-      //   page,
-      //   includeAdult: false,
-      // );
-      return [];
+      final response = await apiClient.searchMovies(
+        apiKey, // api_key
+        language, // language
+        query, // query
+        page, // page
+        false, // include_adult ← Now this will work
+      );
+      return response.results;
     } catch (_) {
       return [];
     }

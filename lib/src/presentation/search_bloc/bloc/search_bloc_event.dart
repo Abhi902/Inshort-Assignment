@@ -1,11 +1,17 @@
-// import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
 
-// part of 'search_bloc_bloc.dart';
+abstract class SearchBlocEvent extends Equatable {
+  const SearchBlocEvent();
 
+  @override
+  List<Object> get props => [];
+}
 
-// sealed class SearchBlocEvent extends Equatable {
-//   const SearchBlocEvent();
+class TextChanged extends SearchBlocEvent {
+  final String text;
 
-//   @override
-//   List<Object> get props => [];
-// }
+  const TextChanged(this.text);
+
+  @override
+  List<Object> get props => [text];
+}

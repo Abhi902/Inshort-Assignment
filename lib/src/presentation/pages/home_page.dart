@@ -8,6 +8,7 @@ import 'package:inshort_assignment/src/presentation/home_bloc/home_event_event.d
 import 'package:inshort_assignment/src/presentation/home_bloc/home_event_state.dart';
 import 'package:inshort_assignment/src/presentation/pages/bookmark_page.dart';
 import 'package:inshort_assignment/src/presentation/pages/movie_details_page.dart';
+import 'package:inshort_assignment/src/presentation/pages/search_page.dart';
 import '../../domain/models/movie.dart';
 
 class HomePage extends StatelessWidget {
@@ -31,11 +32,20 @@ class HomePage extends StatelessWidget {
             ),
           ),
           actions: [
+            // Bookmark Button (existing)
             IconButton(
               icon: const Icon(Icons.bookmark),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const SavedMoviesPage()),
+              ),
+            ),
+            // Search Button (NEW)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SearchPage()),
               ),
             ),
           ],
