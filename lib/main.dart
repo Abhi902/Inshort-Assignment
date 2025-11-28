@@ -2,13 +2,13 @@
 
 import 'dart:async';
 
+import 'package:app_links/app_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:uni_links/uni_links.dart';
 
 import 'package:inshort_assignment/src/core/theme/app_theme.dart';
 import 'package:inshort_assignment/src/data/api/tmdb_api_client.dart';
@@ -59,7 +59,6 @@ Future<void> main() async {
   dio.options.headers['accept'] = 'application/json';
 
   final apiClient = TmdbApiClient(dio);
-
   const apiKey = '013ea9a262afac3c059176f1448cf617';
 
   final movieRepository = MovieRepository(
@@ -96,33 +95,33 @@ class AppRoot extends StatefulWidget {
 }
 
 class _AppRootState extends State<AppRoot> {
-  StreamSubscription<Uri?>? _sub;
+  late final AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSub;
 
   @override
   void initState() {
     super.initState();
+    _appLinks = AppLinks();
     _initDeepLinks();
   }
 
   Future<void> _initDeepLinks() async {
-    // App launched via deep link
+    // 1) Cold start: app launched from a link. [web:120][web:122]
     try {
-      final initialUri = await getInitialUri();
+      final initialUri = await _appLinks.getInitialLink();
       if (initialUri != null) {
         _handleUri(initialUri);
       }
     } on PlatformException {
       // ignore
     } on FormatException {
-      // bad URI, ignore
+      // ignore bad uri
     }
 
-    // App already running / background
-    _sub = uriLinkStream.listen(
-      (Uri? uri) {
-        if (uri != null) {
-          _handleUri(uri);
-        }
+    // 2) Warm state: app already running, receives new link. [web:120][web:122]
+    _linkSub = _appLinks.uriLinkStream.listen(
+      (Uri uri) {
+        _handleUri(uri);
       },
       onError: (Object err) {
         // ignore
@@ -131,8 +130,7 @@ class _AppRootState extends State<AppRoot> {
   }
 
   void _handleUri(Uri uri) {
-    // Real deep link: myflix://movie/{id}
-    // Make sure your share link uses this format.
+    // Expecting: myflix://movie/{id}
     if (uri.scheme == 'myflix' &&
         uri.host == 'movie' &&
         uri.pathSegments.isNotEmpty) {
@@ -149,7 +147,7 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   void dispose() {
-    _sub?.cancel();
+    _linkSub?.cancel();
     super.dispose();
   }
 
@@ -171,14 +169,13 @@ class _AppRootState extends State<AppRoot> {
                 movieRepository: context.read<MovieRepository>(),
               ),
             ),
-            // other global blocs if needed
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,
             title: 'Movies Database',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: ThemeMode.dark, // Netflix dark by default
+            themeMode: ThemeMode.dark,
             home: const HomePage(),
           ),
         ),

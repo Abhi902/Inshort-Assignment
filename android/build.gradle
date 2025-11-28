@@ -1,12 +1,11 @@
+// android/build.gradle (project level)
+
 buildscript {
     ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
     }
-
-     
-
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -22,11 +21,18 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
-subprojects {
+
+subprojects { project ->
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
+
+    // 🔽 Force all modules (including plugins like app_links) to use <= 1.15.0
+    configurations.all { config ->
+        config.resolutionStrategy {
+            force "androidx.core:core:1.15.0"
+            force "androidx.core:core-ktx:1.15.0"
+        }
+    }
 }
 
 tasks.register("clean", Delete) {

@@ -52,4 +52,9 @@ flutter {
 dependencies {
     // Required when `coreLibraryDesugaringEnabled true` is set in `compileOptions`
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+
+    // Force a version of AndroidX Core compatible with AGP 8.2.2
+implementation "androidx.core:core:1.14.0"
+implementation "androidx.core:core-ktx:1.14.0"
+
 }

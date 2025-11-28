@@ -48,8 +48,8 @@ dependencies:
   retrofit: ^4.6.0
   retrofit_generator: ^9.3.0
   rxdart: ^0.28.0
-  share_plus: ^12.0.1
-  uni_links: ^0.5.1
+  share_plus: ^7.2.2
+  app_links: ^6.4.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0
