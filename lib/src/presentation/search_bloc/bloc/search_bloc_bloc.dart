@@ -65,7 +65,7 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchState> {
     } catch (e, stackTrace) {
       log('❌ API ERROR: $e');
       log('📍 Stack trace: $stackTrace');
-      emit(SearchError(message: e.toString()));
+      emit(const SearchRateLimited('TMDB API rate limit exceeded'));
     }
   }
 

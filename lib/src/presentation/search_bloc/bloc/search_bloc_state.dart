@@ -21,6 +21,15 @@ class SearchSuccess extends SearchState {
   List<Object> get props => [results];
 }
 
+// search_bloc_state.dart
+class SearchRateLimited extends SearchState {
+  final String message;
+  const SearchRateLimited(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class SearchEmpty extends SearchState {}
 
 class SearchError extends SearchState {

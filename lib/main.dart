@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inshort_assignment/src/core/theme/app_theme.dart';
 import 'package:inshort_assignment/src/data/interceptors/logging_interceptor.dart';
 import 'package:inshort_assignment/src/data/interceptors/retry_interceptor.dart';
 import 'package:inshort_assignment/src/data/local/bookmarked_movie_hive_adapter.dart';
@@ -64,7 +65,12 @@ void main() async {
         RepositoryProvider<String>.value(value: apiKey),
         RepositoryProvider<MovieRepository>.value(value: movieRepository),
       ],
-      child: const MyApp(),
+      child: MaterialApp(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.dark, // Netflix dark by default
+        home: const MyApp(),
+      ),
     ),
   );
 }
