@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_bloc.dart';
 import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_event.dart';
 import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_state.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../domain/models/movie_details.dart';
 
@@ -16,6 +17,12 @@ class MovieDetailsPage extends StatelessWidget {
   const MovieDetailsPage({Key? key, required this.movieId}) : super(key: key);
 
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+
+  void _shareMovie(MovieDetails movie) {
+    final deepLink = 'myflix://movie/${movie.id}';
+    final text = 'Check out "${movie.title}" on MyFlix: $deepLink';
+    Share.share(text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +57,12 @@ class MovieDetailsPage extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.share_outlined, size: 20),
-                onPressed: () {},
+                onPressed: () {
+                  final state = context.read<MovieDetailsBloc>().state;
+                  if (state is MovieDetailsLoaded) {
+                    _shareMovie(state.movieDetails);
+                  }
+                },
               ),
               SizedBox(width: 4.w),
             ],
