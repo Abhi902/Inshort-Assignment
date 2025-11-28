@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
-import '../../../domain/models/movie_details.dart';
+import '../../../../domain/models/movie_details.dart';
 import 'movie_details_event.dart';
 import 'movie_details_state.dart';
 

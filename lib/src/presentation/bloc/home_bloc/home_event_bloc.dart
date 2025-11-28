@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inshort_assignment/src/presentation/home_bloc/home_event_event.dart';
-import 'package:inshort_assignment/src/presentation/home_bloc/home_event_state.dart';
-import '../../data/repositories/movie_repository.dart';
+import 'package:inshort_assignment/src/presentation/bloc/home_bloc/home_event_event.dart';
+import 'package:inshort_assignment/src/presentation/bloc/home_bloc/home_event_state.dart';
+import '../../../data/repositories/movie_repository.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final MovieRepository movieRepository;

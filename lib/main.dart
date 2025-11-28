@@ -19,7 +19,7 @@ import 'package:inshort_assignment/src/data/local/movie_detail_hive_adapter.dart
 import 'package:inshort_assignment/src/data/local/movie_hive_adapter.dart';
 import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
 
-import 'src/presentation/home_bloc/home_event_bloc.dart';
+import 'src/presentation/bloc/home_bloc/home_event_bloc.dart';
 import 'src/presentation/pages/home_page.dart';
 import 'src/presentation/pages/movie_details_page.dart';
 

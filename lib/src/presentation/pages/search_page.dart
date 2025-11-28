@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inshort_assignment/src/presentation/pages/movie_details_page.dart';
-import 'package:inshort_assignment/src/presentation/search_bloc/bloc/search_bloc_bloc.dart';
-import 'package:inshort_assignment/src/presentation/search_bloc/bloc/search_bloc_event.dart';
-import 'package:inshort_assignment/src/presentation/search_bloc/bloc/search_bloc_state.dart';
+import 'package:inshort_assignment/src/presentation/bloc/search_bloc/search_bloc_bloc.dart';
+import 'package:inshort_assignment/src/presentation/bloc/search_bloc/search_bloc_event.dart';
+import 'package:inshort_assignment/src/presentation/bloc/search_bloc/search_bloc_state.dart';
 import 'package:inshort_assignment/src/data/repositories/movie_repository.dart';
 import '../../domain/models/movie.dart';
 

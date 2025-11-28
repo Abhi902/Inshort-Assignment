@@ -4,9 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_bloc.dart';
-import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_event.dart';
-import 'package:inshort_assignment/src/presentation/movie_details/bloc/movie_details_state.dart';
+import 'package:inshort_assignment/src/presentation/bloc/movie_details/bloc/movie_details_bloc.dart';
+import 'package:inshort_assignment/src/presentation/bloc/movie_details/bloc/movie_details_event.dart';
+import 'package:inshort_assignment/src/presentation/bloc/movie_details/bloc/movie_details_state.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../domain/models/movie_details.dart';
