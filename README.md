@@ -65,3 +65,11 @@
 - The shared link will look like `myflix://movie/{id}`, for example `myflix://movie/550`.[1][2]
 - Tapping that link on a device with the app installed will **open the app directly on that movie’s details screen**, instead of just opening the home page.[3][1]
 
+## Screenshots
+
+![Screen 1](assets/a.png)
+![Screen 2](assets/2.png)
+![Screen 3](assets/3.png)
+![Screen 4](assets/4.png)
+![Screen 5](assets/5.png)
+![Screen 6](assets/6.png)
